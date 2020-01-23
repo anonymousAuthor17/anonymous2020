@@ -30,7 +30,7 @@ public class BuildTRC_RG {
          // assumming all nodes are ordered such that the triplet {X Y Z} is ordered in a way X is always defined before Y, and
          //Z is the child node
              
-              //    BufferedReader bf2= new BufferedReader(new FileReader("promedas_ordered.uai"));// input ordered npt file
+               //   BufferedReader bf2= new BufferedReader(new FileReader("promedas_ordered.uai"));// input ordered npt file
                 BufferedReader bf2= new BufferedReader(new FileReader("pedigree_ordered.uai"));
               // BufferedReader bf2= new BufferedReader(new FileReader("asia_ordered.uai"));
               // BufferedReader bf2= new BufferedReader(new FileReader("student_ordered.uai"));
@@ -39,7 +39,7 @@ public class BuildTRC_RG {
         ///////////////////////////////////////////////////////////////////////////////////////////////input card file
                   
                   BufferedReader bf3= new BufferedReader(new FileReader("pedigree_card.uai"));// cardinals
-                  
+                //  BufferedReader bf3= new BufferedReader(new FileReader("promedas_card.uai"));// cardinals
                   
              /////////////////////////////////////////////////////////////////////////////////////////     
        
@@ -47,6 +47,7 @@ public class BuildTRC_RG {
         boolean node_reuse=true;// perform node reuse for replicated nodes
         boolean inter_triplet_removal=true;// perform interaction triplet removal = relaxation of the perfect correlation property
         
+        int boundedspace=16;// upper bound of the TRC region space
          String s2 = null, s3=null;
         List<String> reusednodes=new ArrayList();// if a child original node is reused once it should not be reused twice in another Hamiltonian path
         
@@ -99,7 +100,7 @@ public class BuildTRC_RG {
             int c=1; //int sizecopies=0;
          
          System.out.println("original nodes size:"+mnodes.size());
-         System.out.println("card size="+card.size());
+        // System.out.println("card size="+card.size());
          for (int t=0;t<mnodes.size();t++){
            //  System.out.println(mnodes.get(t));
              
@@ -150,6 +151,7 @@ public class BuildTRC_RG {
                         
                          if (!node_reuse) {
                          str[0]="E"+Enodesize;   
+                         card.add("2");//not replicate anything
                          Enodesize++;//increase the size
                          }else                             
                             str[0]=str[1];
@@ -190,6 +192,7 @@ public class BuildTRC_RG {
                          
                          if (!node_reuse){
                           str[0]="E"+Enodesize; 
+                          card.add("2");
                           Enodesize++;//increase the size
                           } else 
                              str[0]=indexmap.get(npt[1]).toString(); // 
@@ -313,7 +316,7 @@ public class BuildTRC_RG {
                                         addstr[1]=str1[1];
                                         addstr[2]=str1[2];
                                         if (!areallexisted(interactiontriplets,addstr))
-                              interactiontriplets.add(addstr); 
+                                             interactiontriplets.add(addstr); 
                               //    System.out.println("testtesttest");
                                   }
                                   
@@ -411,7 +414,7 @@ public class BuildTRC_RG {
                                         addstr[1]=str1[1];
                                         addstr[2]=str1[2];
                                         if (!areallexisted(interactiontriplets,addstr))
-                              interactiontriplets.add(addstr); 
+                                             interactiontriplets.add(addstr); 
                               //    System.out.println("testtesttest");
                                   }
                                   
@@ -419,7 +422,7 @@ public class BuildTRC_RG {
                               }else{
                               
                                if (!areallexisted(interactiontriplets,str1))
-                              interactiontriplets.add(str1);
+                                   interactiontriplets.add(str1);
                               
                               }
                           
@@ -484,7 +487,7 @@ public class BuildTRC_RG {
                               }else{
                               
                                if (!areallexisted(interactiontriplets,str1))
-                              interactiontriplets.add(str1);
+                                    interactiontriplets.add(str1);
                               
                               }
                           
@@ -525,7 +528,10 @@ public class BuildTRC_RG {
                          //  if (!node_reuse)  
                            {  
                            str[2]="E"+Enodesize;// copy of npt[3]
-                         
+                        // System.out.println("test card:"+npt[3]);
+                          
+                            card.add(card.get(Integer.valueOf(npt[3])));
+                           
                            Enodesize++;
                            }
                   
@@ -557,7 +563,7 @@ public class BuildTRC_RG {
                                         addstr[1]=str1[1];
                                         addstr[2]=str1[2];
                                         if (!areallexisted(interactiontriplets,addstr))
-                              interactiontriplets.add(addstr); 
+                                           interactiontriplets.add(addstr); 
                              //     System.out.println("testtesttest");
                                   }
                                   
@@ -565,7 +571,7 @@ public class BuildTRC_RG {
                               }else{
                               
                                if (!areallexisted(interactiontriplets,str1))
-                              interactiontriplets.add(str1);
+                                   interactiontriplets.add(str1);
                               
                               }
                           
@@ -624,7 +630,8 @@ public class BuildTRC_RG {
                          
                       // if (!node_reuse)  {  
                            str[2]="E"+Enodesize;// copy of npt[3]
-                        
+                        //System.out.println("test card:"+npt[3]);
+                        card.add(card.get(Integer.valueOf(npt[3])));
                             Enodesize++;
                         //}
                        
@@ -659,7 +666,7 @@ public class BuildTRC_RG {
                                         addstr[1]=str1[1];
                                         addstr[2]=str1[2];
                                         if (!areallexisted(interactiontriplets,addstr))
-                              interactiontriplets.add(addstr); 
+                                            interactiontriplets.add(addstr); 
                                 //  System.out.println("testtesttest");
                                   }
                                   
@@ -667,7 +674,7 @@ public class BuildTRC_RG {
                               }else{
                               
                                if (!areallexisted(interactiontriplets,str1))
-                              interactiontriplets.add(str1);
+                                   interactiontriplets.add(str1);
                               
                               }
                           
@@ -849,7 +856,7 @@ public class BuildTRC_RG {
                            
                          triplet[0]="";
                          triplet[1]="";
-                         //triplet[2]="";
+                         
                      
                      }
                  
@@ -900,15 +907,18 @@ public class BuildTRC_RG {
           System.out.println();
           System.out.println("MARKOV");
           System.out.println(allnodes.size());
-           for (int i=0;i<allnodes.size();i++){
+          
+          System.out.println("card size="+card.size());
+           for (int i=0;i<card.size();i++){
            
-           System.out.print("2 ");
-       
+           //System.out.print("2 ");
+             System.out.print(card.get(i)+" ");
            }
-           
+           int total=0;
+           total=(primarytripletsize+interactiontriplets2.size())+npts.size();
            System.out.println();
            System.out.println();
-           System.out.println((primarytripletsize+interactiontriplets2.size())+npts.size());
+           System.out.println(total);
            System.out.println();
            System.out.println();
            System.out.println();
@@ -924,20 +934,40 @@ public class BuildTRC_RG {
            
       
       
-      String [] p_triplet=null; 
+            
+      
            for (int u=0;u<primarytriplets2.size();u++){
       
-        p_triplet=primarytriplets2.get(u);
+        String [] p_triplet=primarytriplets2.get(u);
         
         if (p_triplet.length==2) {
             if (!p_triplet[0].equals(""))
             System.out.println("2 "+namemap.get(p_triplet[0])+" "+namemap.get(p_triplet[1])+" " ); }
         
-       else {
+       else {// triplet length=3
             
             if (!p_triplet[0].equals(""))
+            { 
+                if (inter_triplet_removal){
+            if (copiedNPTsID.size()!=0){   
+            for (int p=0;p<copiedNPTsID.size();p++){
+            
+                if (u==Integer.valueOf(copiedNPTsID.get(p))){ 
+                
+                System.out.println("2 "+namemap.get(p_triplet[0])+" "+namemap.get(p_triplet[2])+" ");
+                break;
+                }
+             
+                if (p==copiedNPTsID.size()-1)
+                    System.out.println("3 "+namemap.get(p_triplet[0])+" "+namemap.get(p_triplet[1])+" "+namemap.get(p_triplet[2])+" ");
+            }
+            } else  
+                 
             System.out.println("3 "+namemap.get(p_triplet[0])+" "+namemap.get(p_triplet[1])+" "+namemap.get(p_triplet[2])+" ");
-     
+           
+// if (namemap.get(p_triplet[0]).equals("523")&& namemap.get(p_triplet[1]).equals("391")) System.out.println("found");
+                }else System.out.println("3 "+namemap.get(p_triplet[0])+" "+namemap.get(p_triplet[1])+" "+namemap.get(p_triplet[2])+" ");
+            }
         }
       }
            
@@ -950,7 +980,15 @@ public class BuildTRC_RG {
            {
       
       String [] i_triplet=interactiontriplets2.get(u);
-    System.out.println("3 "+namemap.get(i_triplet[0])+" "+namemap.get(i_triplet[1])+" "+namemap.get(i_triplet[2])+" ");
+      
+      int x=0,y=0,z=0;
+                   x=Integer.valueOf(card.get(Integer.valueOf(namemap.get(i_triplet[0]).toString())));
+                   y=Integer.valueOf(card.get(Integer.valueOf(namemap.get(i_triplet[1]).toString())));
+                   z=Integer.valueOf(card.get(Integer.valueOf(namemap.get(i_triplet[2]).toString())));
+                   //  System.out.print(x*y*z+" ");
+      if(x*y*z>boundedspace){}else // delete large regions exceeding bounded cluster space
+      
+      System.out.println("3 "+namemap.get(i_triplet[0])+" "+namemap.get(i_triplet[1])+" "+namemap.get(i_triplet[2])+" ");
       
   
        }
@@ -962,54 +1000,184 @@ public class BuildTRC_RG {
             
            for (int u=0;u<primarytriplets2.size();u++){
            
-               p_triplet=primarytriplets2.get(u);
+             String []  p_triplet=primarytriplets2.get(u);
                
                if (copiedNPTsID.size()!=0){
-               if (p_triplet.length==3){
                    
+               if (p_triplet.length==3){
+                   if (inter_triplet_removal){ // relax perfect corr
                for (int p=0;p<copiedNPTsID.size();p++){
                
                    if (u==Integer.valueOf(copiedNPTsID.get(p))){
+                       
+                   int x=0,y=0,z=0;
+                   x=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[0]).toString())));
+                   y=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[1]).toString())));
+                   z=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[2]).toString())));;
+                   // System.out.println("test product:"+x*y*z);
                    
+             /*      if (x*y*z==32) System.out.println("32 1 0 0 0 1 0 0 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 1");
+                   else if (x*y*z==64) System.out.println("64 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0"
+                           + " 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0"
+                           + " 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0"
+                           + " 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1");
+                   else  if (x*y*z==16) System.out.println("16 1 0 1 0 1 0 1 0 0 1 0 1 0 1 0 1");
+                   else 
                    System.out.println("8 1 0 1 0 0 1 0 1");
+                */    
+                   //skip middle node// diagonal matrix
+                    if (x*z==4) System.out.println("4 1 0 0 1");
+                    if (x*z==9) System.out.println("9 1 0 0 0 1 0 0 0 1 ");
+                    if (x*z==16) System.out.println("16 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1");
+                    
+                   
                    break;
+                   
+                   
                    }
                
-                 if (p==copiedNPTsID.size()-1 && !p_triplet[0].equals(""))  System.out.println("8 1 1 1 1 1 1 1 1");    
+                 if (p==copiedNPTsID.size()-1 && !p_triplet[0].equals("")) { 
+                     
+                     int x=0,y=0,z=0;
+                   x=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[0]).toString())));
+                   y=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[1]).toString())));
+                   z=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[2]).toString())));;
+                     System.out.print(x*y*z+" ");
+                     for (int t=0;t<x*y*z;t++) System.out.print("1 ");
+                     System.out.println();
+                 
+                 
+                 }
                    
                }
+               } else{  // retain perfect corr
+                   
+                   for (int p=0;p<copiedNPTsID.size();p++){
+               
+                   if (u==Integer.valueOf(copiedNPTsID.get(p))){
+                       
+                   int x=0,y=0,z=0;
+                   x=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[0]).toString())));
+                   y=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[1]).toString())));
+                   z=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[2]).toString())));;
+                   // System.out.println("test product:"+x*y*z);
+                   // skip middle node
+                   if (x*y*z==32) System.out.println("32 1 0 0 0 1 0 0 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 1");
+                   else if (x*y*z==64) System.out.println("64 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0"
+                           + " 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0"
+                           + " 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0"
+                           + " 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1");
+                   else  if (x*y*z==16) System.out.println("16 1 0 1 0 1 0 1 0 0 1 0 1 0 1 0 1");
+                   else 
+                   System.out.println("8 1 0 1 0 0 1 0 1");
+                   
+                   
+                   
+                   break;
+                   
+                   
+                   }
+               
+                 if (p==copiedNPTsID.size()-1 && !p_triplet[0].equals("")) { 
+                     
+                     int x=0,y=0,z=0;
+                   x=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[0]).toString())));
+                   y=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[1]).toString())));
+                   z=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[2]).toString())));;
+                     System.out.print(x*y*z+" ");
+                     for (int t=0;t<x*y*z;t++) System.out.print("1 ");
+                     System.out.println();
+                 
+                 
+                 }
+                   
+               }
+                       
+                       
+                   
+                   
+                   }
                
                }else {
                    if (!p_triplet[0].equals(""))
-                   System.out.println("4 1 1 1 1");}
+                   {  int x=0,y=0;
+                   x=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[0]).toString())));
+                   y=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[1]).toString())));
+                 //  z=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[2]).toString())));;
+                     System.out.print(x*y+" ");
+                     for (int t=0;t<x*y;t++) System.out.print("1 ");
+                     System.out.println();
+                   }
+               }
                
                }else{
                
                if (p_triplet.length==3 ){
                
-                if (!p_triplet[0].equals(""))   // not empty
-               System.out.println("8 1 1 1 1 1 1 1 1");
-               
+                if (!p_triplet[0].equals("")) {  // not empty
+                int x=0,y=0,z=0;
+                   x=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[0]).toString())));
+                   y=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[1]).toString())));
+                   z=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[2]).toString())));
+                     System.out.print(x*y*z+" ");
+                     for (int t=0;t<x*y*z;t++) System.out.print("1 ");
+                     System.out.println();
+                }
                
                }else {
                    
                    if (!p_triplet[0].equals(""))
-                   System.out.println("4 1 1 1 1");}
+                  {  int x=0,y=0;
+                   x=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[0]).toString())));
+                   y=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[1]).toString())));
+                 
+                     System.out.print(x*y+" ");
+                     for (int t=0;t<x*y;t++) System.out.print("1 ");
+                     System.out.println();
+                   }
+               
+               
+               }
                
                
            }
            
            }
           
-           
+           int deletecount=0;
         for (int u=0;u<interactiontriplets2.size();u++){
-        
-        System.out.println("8 1 1 1 1 1 1 1 1"); 
+        String [] i_triplet=interactiontriplets2.get(u);
+            if (i_triplet.length==3){
+            
+                   int x=0,y=0,z=0;
+                   x=Integer.valueOf(card.get(Integer.valueOf(namemap.get(i_triplet[0]).toString())));
+                   y=Integer.valueOf(card.get(Integer.valueOf(namemap.get(i_triplet[1]).toString())));
+                   z=Integer.valueOf(card.get(Integer.valueOf(namemap.get(i_triplet[2]).toString())));
+                   
+                   if(x*y*z>boundedspace){deletecount++;}else{
+                   
+                     System.out.print(x*y*z+" ");
+                     for (int t=0;t<x*y*z;t++) System.out.print("1 ");
+                     System.out.println();
+                   }
+            
+            } else {
+            
+                  int x=0,y=0;
+                   x=Integer.valueOf(card.get(Integer.valueOf(namemap.get(i_triplet[0]).toString())));
+                   y=Integer.valueOf(card.get(Integer.valueOf(namemap.get(i_triplet[1]).toString())));
+                 
+                     System.out.print(x*y+" ");
+                     for (int t=0;t<x*y;t++) System.out.print("1 ");
+                     System.out.println();
+            
+            }
+          
         
         }
                    
-          
-           
+          System.out.println("deleted regions:"+deletecount);
+          System.out.println("final outer regions:"+(total-deletecount));
          }catch(Exception e){}
     
     
