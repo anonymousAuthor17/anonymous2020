@@ -31,23 +31,31 @@ public class BuildTRC_RG {
          //Z is the child node
              
                //   BufferedReader bf2= new BufferedReader(new FileReader("promedas_ordered.uai"));// input ordered npt file
-                BufferedReader bf2= new BufferedReader(new FileReader("pedigree_ordered.uai"));
+               // BufferedReader bf2= new BufferedReader(new FileReader("pedigree_ordered.uai"));
               // BufferedReader bf2= new BufferedReader(new FileReader("asia_ordered.uai"));
               // BufferedReader bf2= new BufferedReader(new FileReader("student_ordered.uai"));
               //   BufferedReader bf2= new BufferedReader(new FileReader("bayesgrid_ordered.uai"));
             //   BufferedReader bf2= new BufferedReader(new FileReader("HMM_ordered.uai"));
+                //  BufferedReader bf2= new BufferedReader(new FileReader("4denseBN_ordered.uai"));
+           //  BufferedReader bf2= new BufferedReader(new FileReader("5denseBN_ordered.uai"));
+             BufferedReader bf2= new BufferedReader(new FileReader("6denseBN_ordered.uai"));
         ///////////////////////////////////////////////////////////////////////////////////////////////input card file
                   
-                  BufferedReader bf3= new BufferedReader(new FileReader("pedigree_card.uai"));// cardinals
+                //  BufferedReader bf3= new BufferedReader(new FileReader("pedigree_card.uai"));// cardinals
                 //  BufferedReader bf3= new BufferedReader(new FileReader("promedas_card.uai"));// cardinals
-                  
+                 //   BufferedReader bf3= new BufferedReader(new FileReader("4denseBN_card.uai"));// cardinals
+              // BufferedReader bf3= new BufferedReader(new FileReader("5denseBN_card.uai"));// cardinals
+               BufferedReader bf3= new BufferedReader(new FileReader("6denseBN_card.uai"));// cardinals
              /////////////////////////////////////////////////////////////////////////////////////////     
        
-       
+       // control parameters
         boolean node_reuse=true;// perform node reuse for replicated nodes
         boolean inter_triplet_removal=true;// perform interaction triplet removal = relaxation of the perfect correlation property
         
-        int boundedspace=16;// upper bound of the TRC region space
+        int boundedspace=32;// upper bound of the TRC region space
+        
+        ////////////////////////////////////////////////////////////////////
+        
          String s2 = null, s3=null;
         List<String> reusednodes=new ArrayList();// if a child original node is reused once it should not be reused twice in another Hamiltonian path
         
@@ -954,8 +962,8 @@ public class BuildTRC_RG {
             
                 if (u==Integer.valueOf(copiedNPTsID.get(p))){ 
                 
-                System.out.println("2 "+namemap.get(p_triplet[0])+" "+namemap.get(p_triplet[2])+" ");
-                break;
+          //      System.out.println("2 "+namemap.get(p_triplet[0])+" "+namemap.get(p_triplet[2])+" ");
+          //      break;
                 }
              
                 if (p==copiedNPTsID.size()-1)
@@ -1016,7 +1024,7 @@ public class BuildTRC_RG {
                    z=Integer.valueOf(card.get(Integer.valueOf(namemap.get(p_triplet[2]).toString())));;
                    // System.out.println("test product:"+x*y*z);
                    
-             /*      if (x*y*z==32) System.out.println("32 1 0 0 0 1 0 0 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 1");
+                    if (x*y*z==32) System.out.println("32 1 0 0 0 1 0 0 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 1");
                    else if (x*y*z==64) System.out.println("64 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0"
                            + " 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0"
                            + " 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0"
@@ -1024,11 +1032,11 @@ public class BuildTRC_RG {
                    else  if (x*y*z==16) System.out.println("16 1 0 1 0 1 0 1 0 0 1 0 1 0 1 0 1");
                    else 
                    System.out.println("8 1 0 1 0 0 1 0 1");
-                */    
+                    
                    //skip middle node// diagonal matrix
-                    if (x*z==4) System.out.println("4 1 0 0 1");
-                    if (x*z==9) System.out.println("9 1 0 0 0 1 0 0 0 1 ");
-                    if (x*z==16) System.out.println("16 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1");
+              //      if (x*z==4) System.out.println("4 1 0 0 1");
+              //      if (x*z==9) System.out.println("9 1 0 0 0 1 0 0 0 1 ");
+              //      if (x*z==16) System.out.println("16 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1");
                     
                    
                    break;
