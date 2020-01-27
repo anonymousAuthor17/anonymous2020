@@ -31,27 +31,38 @@ public class BuildTRC_RG {
          //Z is the child node
              
                //   BufferedReader bf2= new BufferedReader(new FileReader("promedas_ordered.uai"));// input ordered npt file
-               // BufferedReader bf2= new BufferedReader(new FileReader("pedigree_ordered.uai"));
+              //   BufferedReader bf2= new BufferedReader(new FileReader("pedigree_ordered.uai"));
               // BufferedReader bf2= new BufferedReader(new FileReader("asia_ordered.uai"));
               // BufferedReader bf2= new BufferedReader(new FileReader("student_ordered.uai"));
               //   BufferedReader bf2= new BufferedReader(new FileReader("bayesgrid_ordered.uai"));
             //   BufferedReader bf2= new BufferedReader(new FileReader("HMM_ordered.uai"));
                 //  BufferedReader bf2= new BufferedReader(new FileReader("4denseBN_ordered.uai"));
            //  BufferedReader bf2= new BufferedReader(new FileReader("5denseBN_ordered.uai"));
-             BufferedReader bf2= new BufferedReader(new FileReader("6denseBN_ordered.uai"));
+           //  BufferedReader bf2= new BufferedReader(new FileReader("6denseBN_ordered.uai"));
+             // BufferedReader bf2= new BufferedReader(new FileReader("2x3DBN_ordered.uai"));
+             //  BufferedReader bf2= new BufferedReader(new FileReader("3x3DBN_ordered.uai"));
+              // BufferedReader bf2= new BufferedReader(new FileReader("Barley_ordered.uai"));
+               // BufferedReader bf2= new BufferedReader(new FileReader("Pigs_ordered.uai"));
+                 BufferedReader bf2= new BufferedReader(new FileReader("Diabetes_ordered.uai"));
+                 
         ///////////////////////////////////////////////////////////////////////////////////////////////input card file
                   
-                //  BufferedReader bf3= new BufferedReader(new FileReader("pedigree_card.uai"));// cardinals
+                 //  BufferedReader bf3= new BufferedReader(new FileReader("pedigree_card.uai"));// cardinals
                 //  BufferedReader bf3= new BufferedReader(new FileReader("promedas_card.uai"));// cardinals
                  //   BufferedReader bf3= new BufferedReader(new FileReader("4denseBN_card.uai"));// cardinals
               // BufferedReader bf3= new BufferedReader(new FileReader("5denseBN_card.uai"));// cardinals
-               BufferedReader bf3= new BufferedReader(new FileReader("6denseBN_card.uai"));// cardinals
+              // BufferedReader bf3= new BufferedReader(new FileReader("6denseBN_card.uai"));// cardinals
+             // BufferedReader bf3= new BufferedReader(new FileReader("2x3DBN_card.uai"));// cardinals
+             //  BufferedReader bf3= new BufferedReader(new FileReader("3x3DBN_card.uai"));// cardinals
+              //  BufferedReader bf3= new BufferedReader(new FileReader("Barley_card.uai"));// cardinals
+                //  BufferedReader bf3= new BufferedReader(new FileReader("Pigs_card.uai"));// cardinals
+                  BufferedReader bf3= new BufferedReader(new FileReader("Diabetes_card.uai"));// cardinals
              /////////////////////////////////////////////////////////////////////////////////////////     
        
        // control parameters
         boolean node_reuse=true;// perform node reuse for replicated nodes
         boolean inter_triplet_removal=true;// perform interaction triplet removal = relaxation of the perfect correlation property
-        
+        boolean inter_sink_removal=true;// a further reduction to remove interaction triplets  
         int boundedspace=32;// upper bound of the TRC region space
         
         ////////////////////////////////////////////////////////////////////
@@ -71,12 +82,15 @@ public class BuildTRC_RG {
      
         while((s2 = bf2.readLine())!=null){//
             if(s2.length()!=0){
-            String [] pots=s2.split(" ");
-         
-            mnodes.add(pots[pots.length-1]);
+            String [] pots=null;
+               
+                 pots=s2.split("\\s+");
+                 mnodes.add(pots[pots.length-1]);
             
-            npts.add(pots);// save NPT
-             
+                 npts.add(pots);// save NPT
+                
+                
+                
             
             }
         }
@@ -84,7 +98,7 @@ public class BuildTRC_RG {
         List <String []> tempcard=new ArrayList();
    while((s3 = bf3.readLine())!=null){//
             if(s3.length()!=0){
-            String [] pots=s3.split(" ");
+            String [] pots=s3.split("\\s+");
          
             tempcard.add(pots);
             
@@ -105,7 +119,7 @@ public class BuildTRC_RG {
    //System.out.println("card size="+card.size());
    
          ///////
-            int c=1; //int sizecopies=0;
+            int c=1; int sizecopies=0;
          
          System.out.println("original nodes size:"+mnodes.size());
         // System.out.println("card size="+card.size());
@@ -115,9 +129,10 @@ public class BuildTRC_RG {
             indexmap.put(mnodes.get(t), "x"+t);
             indexmapr.put("x"+t, mnodes.get(t));// x0 to x_(size-1) as the original node
          
-          //   System.out.println("x"+t+" "+mnodes.get(t));
-         
+           // System.out.println("x"+t+" "+mnodes.get(t));
+         //System.out.println(indexmap.get(mnodes.get(t)));
          }
+         
          
          //build the primary triplets and interaction tripelts by BFG mapping
          List<String []> primarytriplets=new ArrayList();
@@ -132,7 +147,7 @@ public class BuildTRC_RG {
          
          for (int t=0;t<npts.size();t++){ // the ordered NPTs
          
-         
+        // System.out.println(npts.get(t).length);
             if (t==0 || t==1){} // x0 and x1 will be merged into {x0 x1 x2}
             
             else{
@@ -255,7 +270,7 @@ public class BuildTRC_RG {
                                   if (p==0) { if (!areallexisted(interactiontriplets,str1))
                                               interactiontriplets.add(str1);}
                                   if (p==1) {record[0]=str1[0];record[1]=str1[1];record[2]=str1[2];}
-                                  if (p==copies-1){
+                                  if (p==(copies-1)){
                                   
                                         String [] addstr=new String [3];
                                         addstr[0]=record[2];
@@ -317,7 +332,7 @@ public class BuildTRC_RG {
                                   if (p==0) { if (!areallexisted(interactiontriplets,str1))
                                               interactiontriplets.add(str1);}
                                   if (p==1) {record[0]=str1[0];record[1]=str1[1];record[2]=str1[2];}
-                                  if (p==copies-1){
+                                  if (p==(copies-1)){
                                   
                                         String [] addstr=new String [3];
                                         addstr[0]=record[2];
@@ -359,30 +374,28 @@ public class BuildTRC_RG {
                 if (npt[0].equals("3")){
                 
                 
-                  //  System.out.println(npt[0]+" "+npt[1]+" "+npt[2]+" "+npt[3]);
-                
+               //     System.out.println(npt[0]+" "+npt[1]+" "+npt[2]+" "+npt[3]);
+              
                     if (t==2){ String [] str=new String [3]; str[0]="x0";str[1]="x1";str[2]="x2"; // no moral// {x0 x1 x2}
                     if (!areallexisted(primarytriplets,str))
                        { primarytriplets.add(str); ID++;}
                     
                     
                     }else{
-                    
-                    
-                    
+                     
                         int distance12=Integer.valueOf(indexmap.get(npt[3]).toString().substring(1, indexmap.get(npt[3]).toString().length()))-
                              Integer.valueOf(indexmap.get(npt[2]).toString().substring(1,indexmap.get(npt[2]).toString().length()));// calculate the distance of the two nodes
-                     
-                        
+                         
                         int distance02=Integer.valueOf(indexmap.get(npt[3]).toString().substring(1, indexmap.get(npt[3]).toString().length()))-
                              Integer.valueOf(indexmap.get(npt[1]).toString().substring(1,indexmap.get(npt[1]).toString().length()));// calculate the distance of the two nodes
                      
-                        
+                       // System.out.println(distance02);
+                       
                     if (distance12==1){ // no sink // equivalent to two nodes case
                     
-                         
+                        //  System.out.println("test no sink");
                         if (indexmap.get(npt[1]).toString().equals("x0")  ){
-                     
+                       
                          // distance=distance-1;
                           int copies=distance02-2;
                           
@@ -415,7 +428,7 @@ public class BuildTRC_RG {
                                   if (p==0) { if (!areallexisted(interactiontriplets,str1))
                                               interactiontriplets.add(str1);}
                                   if (p==1) {record[0]=str1[0];record[1]=str1[1];record[2]=str1[2];}
-                                  if (p==copies-1){
+                                  if (p==(copies-1)){
                                   
                                         String [] addstr=new String [3];
                                         addstr[0]=record[2];
@@ -447,7 +460,7 @@ public class BuildTRC_RG {
                      
                      }else{
                      
-                     
+                    // System.out.println("test no sink");
                          int copies=distance02-1;
                          
                          
@@ -480,7 +493,7 @@ public class BuildTRC_RG {
                                   if (p==0) { if (!areallexisted(interactiontriplets,str1))
                                               interactiontriplets.add(str1);}
                                   if (p==1) {record[0]=str1[0];record[1]=str1[1];record[2]=str1[2];}
-                                  if (p==copies-1){
+                                  if (p==(copies-1)){
                                   
                                         String [] addstr=new String [3];
                                         addstr[0]=record[2];
@@ -488,7 +501,7 @@ public class BuildTRC_RG {
                                         addstr[2]=str1[2];
                                         if (!areallexisted(interactiontriplets,addstr))
                                             interactiontriplets.add(addstr); 
-                                //  System.out.println("testtesttest");
+                                // System.out.println("testtesttest");
                                   }
                                   
                               
@@ -517,7 +530,7 @@ public class BuildTRC_RG {
                     }else{// sink
                     
                     
-                        
+                     
                         
                         int sink=distance12-1;// the number of copies of npt[3]
                         
@@ -547,7 +560,7 @@ public class BuildTRC_RG {
                           if (!areallexisted(primarytriplets,str))
                              { primarytriplets.add(str); ID++;}  // an primary triplet copying original npt
                             
-                          String [] record=new String [3];;
+                          String [] record=new String [3];
                            for (int p=0;p<copies;p++){
                            
                            
@@ -564,7 +577,7 @@ public class BuildTRC_RG {
                                   if (p==0) { if (!areallexisted(interactiontriplets,str1))
                                               interactiontriplets.add(str1);}
                                   if (p==1) {record[0]=str1[0];record[1]=str1[1];record[2]=str1[2];}
-                                  if (p==copies-1){
+                                  if (p==(copies-1)){
                                   
                                         String [] addstr=new String [3];
                                         addstr[0]=record[2];
@@ -608,6 +621,7 @@ public class BuildTRC_RG {
                          // System.out.println("primary:"+str[0]+" "+str[1]+" "+str[2]);
                           }
                            
+                           String [] recordsink=new String [3];
                            for (int p=0;p<sink;p++){
                           
                          
@@ -617,17 +631,53 @@ public class BuildTRC_RG {
                            str2[1]=str[2];//npt[3]
                            str2[2]="x"+(Integer.valueOf(str2[0].substring(1,str2[0].length()))+1);
                            
+                           if (inter_sink_removal){
+                           
+                                    
+                               if (sink>2){
+                                  
+                                  if (p==0) { recordsink[0]=str2[0];recordsink[1]=str2[1];recordsink[2]=str2[2];}
+                                  if (p==(sink-2)) {
+                                  
+                                      String [] addstr=new String [3];
+                                        addstr[0]=recordsink[0];
+                                        addstr[1]=str2[1];// 
+                                        addstr[2]=str2[2]; // 
+                                        if (!areallexisted(interactiontriplets,addstr))
+                                           interactiontriplets.add(addstr); 
+                                  
+                                  }
+                                  if (p==(sink-1)){
+                                  
+                                   if (!areallexisted(interactiontriplets,str2))
+                                   interactiontriplets.add(str2);
+                             //     System.out.println("testtesttest");
+                                  }
+                                  
+                              
+                              }else{
+                              
+                               if (!areallexisted(interactiontriplets,str2))
+                                   interactiontriplets.add(str2);
+                              
+                              }
+                               
+                               
+                               
+                           
+                           }else{
+                           
                            if (!areallexisted(interactiontriplets,str2))
-                               interactiontriplets.add(str2);
+                               interactiontriplets.add(str2);}
                            }
                         
-                           // sizecopies+=copies;
+                        //   sizecopies+=sink;
                             
                            npt[3]=str[2].substring(1, str[2].length());//replace the original node with the E node
                            
                         }else{
                         
-                      //  System.out.println("test sink:"+npt[1]+" "+npt[2]+" "+npt[3]);
+                       // System.out.println("test sink:"+npt[1]+" "+npt[2]+" "+npt[3]);
                             int copies =distance02-1-sink;
                         
                           String [] str=new String [3]; 
@@ -635,10 +685,10 @@ public class BuildTRC_RG {
                           str[0]=indexmap.get(npt[1]).toString();//npt[1]
                         
                           str[1]=indexmap.get(npt[2]).toString();
-                         
+                           
                       // if (!node_reuse)  {  
                            str[2]="E"+Enodesize;// copy of npt[3]
-                        //System.out.println("test card:"+npt[3]);
+                       
                         card.add(card.get(Integer.valueOf(npt[3])));
                             Enodesize++;
                         //}
@@ -648,7 +698,7 @@ public class BuildTRC_RG {
                           { primarytriplets.add(str); ID++;
                          // System.out.println("primary:"+str[0]+" "+str[1]+" "+str[2]);
                           }
-                          
+                         
                          String [] record=new String [3]; 
                         for (int p=0;p<copies;p++){
                            
@@ -667,7 +717,7 @@ public class BuildTRC_RG {
                                   if (p==0) { if (!areallexisted(interactiontriplets,str1))
                                               interactiontriplets.add(str1);}
                                   if (p==1) {record[0]=str1[0];record[1]=str1[1];record[2]=str1[2];}
-                                  if (p==copies-1){
+                                  if (p==(copies-1)){
                                   
                                         String [] addstr=new String [3];
                                         addstr[0]=record[2];
@@ -712,7 +762,7 @@ public class BuildTRC_RG {
                          // System.out.println("primary:"+str3[0]+" "+str3[1]+" "+str3[2]);
                           }
                            
-                           
+                          String [] recordsink=new String [3]; 
                          for (int p=0;p<sink;p++){
                            
                            String str2[]=new String[3];
@@ -720,19 +770,52 @@ public class BuildTRC_RG {
                            str2[1]=str[2];//copy of npt[3]
                            str2[2]="x"+(Integer.valueOf(str2[0].substring(1,str2[0].length()))+1);
                            
-                          if (!areallexisted(interactiontriplets,str2))
-                          { interactiontriplets.add(str2);
-                            //System.out.println("sink:"+str2[0]+" "+str2[1]+" "+str2[2]);
-                          
-                          }
+                            if (inter_sink_removal){
+                          // if (false){
+                                    
+                               if (sink>2){
+                                  
+                                  if (p==0) { recordsink[0]=str2[0];recordsink[1]=str2[1];recordsink[2]=str2[2];}
+                                  if (p==(sink-2)) {
+                                  
+                                      String [] addstr=new String [3];
+                                        addstr[0]=recordsink[0];
+                                        addstr[1]=str2[1];//npt2
+                                        addstr[2]=str2[2]; //npt3
+                                        if (!areallexisted(interactiontriplets,addstr))
+                                           interactiontriplets.add(addstr); 
+                                  
+                                  }
+                                  if (p==(sink-1)){
+                                  
+                                   if (!areallexisted(interactiontriplets,str2))
+                                   interactiontriplets.add(str2);
+                             //     System.out.println("testtesttest");
+                                  }
+                                  
+                              
+                              }else{
+                              
+                               if (!areallexisted(interactiontriplets,str2))
+                                   interactiontriplets.add(str2);
+                              
+                              }
+                               
+                               
+                               
+                           
+                           }else{
+                           
+                           if (!areallexisted(interactiontriplets,str2))
+                               interactiontriplets.add(str2);}
                           }// end for
-                        
+                       // sizecopies+=sink;
                         // System.out.println("size copy:"+sink);
                          
                          
                          npt[3]=str[2].substring(1, str[2].length());//replace the original node with the E node
                          
-                         
+                        // System.out.println("out");
                         }
                         
                        
@@ -749,7 +832,7 @@ public class BuildTRC_RG {
          
          }// end for npts
          ///////////
-       //  System.out.println("number of copies:"+sizecopies);
+         System.out.println("number of sink:"+sizecopies);
           List<String> allnodes=new ArrayList();
      
       
